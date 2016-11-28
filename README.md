@@ -29,16 +29,16 @@ A *simple transaction* is defined as a transaction that has one input or two/one
 transactions feature a transfer and change address).
 
 Complex transactions are formatted like:
-``
+```
 #input
 [address] [amount]
 
 #output
 [address] [amount]
-``
+```
 
 for example:
-``
+```
 #input
 1LkhppoM81Ni5Hb2rd54iiKuDS7rGUvAYj 0.02053905
 169R5TLxsZ4PttgBcQceE7U32yoyT8gmYc 0.0418
@@ -48,7 +48,7 @@ for example:
 1HxtTp8yJ4e7PDgv9XtMZ6jqdFgy9a6BMh 0.3255
 1Bwsj9BQHjr4Pdr11HqYL84bS5xQeFpMLm 0.0194
 1Cw1BXVQsxCyrDz7JeLXpkJ3wjVZvkKP7T 0.45303905
-``
+```
 
 for a three input three output transaction.
 
