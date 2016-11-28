@@ -16,8 +16,10 @@ public class TransactionAnalysis {
 	public final static int INPUT = 1, OUTPUT = 2;
 	
 	public static void main(String[] args){
+		Scanner sc = new Scanner(System.in);
+		
 		/* Test functions */
-		Transaction tx = initializeGraphNodes(args[0]);
+		Transaction tx = initializeGraphNodes(sc.nextLine());
 		joinAndCounteract(tx);
 		ignoreSmallInput(tx);
 		//if (!isValidTransaction) 
@@ -25,17 +27,26 @@ public class TransactionAnalysis {
 		List<Subset> outputSubsets = calculateSubsets(tx.output, OUTPUT);
 		if (inputSubsets.size() == 0 || outputSubsets.size() == 0){ // at least one of list has only one node, cannot be further partitioned
 			System.out.println("At least one side has only one party");
-			System.out.println("#Different partitions: 0");
+		//	System.out.println("#Different partitions: 0");
+			System.out.println("#Different partitions: 1");
 			return;
 		}
 		List<SubsetPair> pairList = calculateValidSubsetPairs(inputSubsets, outputSubsets, tx.cost);
 		if (pairList.size() == 0){ // No valid pairs formed
 			System.out.println("No valid pairs formed");
-			System.out.println("#Different partitions: 0");
+		//	System.out.println("#Different partitions: 0");
+			System.out.println("#Different partitions: 1");
 			return;
 		}
 		List<SubsetPairGroup> groupList = calculateCoveringSubsetPairGroups(pairList);
-		System.out.println("#Different Paritions: " + groupList.size());
+		//System.out.println("#Different Paritions: " + groupList.size());
+		
+		for (int i = 0; i < groupList.size(); i++){
+			System.out.println("Possible partition " + (i + 1) + ": ");
+			groupList.get(i).printAsTransaction(tx);
+		}
+		
+		System.out.println("#Different Paritions: " + (groupList.size() + 1));
 	}
 	
 	/*
@@ -240,11 +251,52 @@ public class TransactionAnalysis {
 	
 	
 	/*
-	 * Sort all 2^n + 2^m input and output subsets
+	 * For each input subset, find where to insert into outputSubsets
 	 * Find all valid (i.e. 0 <= cost <= c) pairs of input subset and output subset
 	 * Form a list of valid SubsetPair
 	 */
 	private static List<SubsetPair> calculateValidSubsetPairs(List<Subset> inputSubsets, List<Subset> outputSubsets, double c){
+		List<SubsetPair> pairList = new ArrayList<SubsetPair>();
+		
+		outputSubsets.sort(new Subset.SubsetComparator());  // ascending order
+		int inputSubsetNum = inputSubsets.size();
+		int outputSubsetNum = outputSubsets.size();
+		int index, leftRange, rightRange;
+		Subset currInputSubset;
+		/* binary search for inserting position: */
+		/* 	between outputSubset[index - 1] <= inputSum < outputSubset[index] */
+		/* then all capable outputSubset can be found on the left */
+		outputSubsets.add(0, new Subset(null, 0, OUTPUT));
+		outputSubsets.add(new Subset(null, -1 >>> 1, OUTPUT));
+		for (int i = 0; i < inputSubsetNum; i++){
+			currInputSubset = inputSubsets.get(i);
+			leftRange = 0; rightRange = outputSubsetNum + 1;
+			while(true){
+				index = (leftRange + rightRange) / 2;
+				if (outputSubsets.get(index).sum <= currInputSubset.sum) leftRange = index;
+				else if (outputSubsets.get(index).sum > currInputSubset.sum) rightRange = index;
+				
+				if (rightRange - leftRange == 1) break;
+			}
+			/* go left from leftRange*/
+			index = leftRange;
+			for (int j = index; j > 0; j--){
+				if (outputSubsets.get(j).sum >= DoubleArithmetic.sub(currInputSubset.sum, c))
+					pairList.add(new SubsetPair(currInputSubset, outputSubsets.get(j)));
+				else break;
+			}
+		}
+		
+		return pairList;
+	}
+	
+	/*
+	 * Old Version *
+	 * Sort all 2^n + 2^m input and output subsets
+	 * Find all valid (i.e. 0 <= cost <= c) pairs of input subset and output subset
+	 * Form a list of valid SubsetPair
+	 */
+	private static List<SubsetPair> calculateValidSubsetPairs_old(List<Subset> inputSubsets, List<Subset> outputSubsets, double c){
 		List<SubsetPair> pairList = new ArrayList<SubsetPair>();
 		
 		List<Subset> merged = new ArrayList<Subset>();
@@ -284,6 +336,46 @@ public class TransactionAnalysis {
 	 * => Final result
 	 */
 	private static List<SubsetPairGroup> calculateCoveringSubsetPairGroups(List<SubsetPair> pairList){
+		List<SubsetPairGroup> groupList = new ArrayList<SubsetPairGroup>();
+		SubsetPairGroup group;
+		
+		int inputSize = pairList.get(0).inputSubset.indicator.length;
+		int outputSize = pairList.get(0).outputSubset.indicator.length;
+		groupList.add(new SubsetPairGroup(inputSize, outputSize));
+		groupList.add(new SubsetPairGroup(pairList.get(0)));
+		int index;
+		SubsetPair currPair;
+		for (int i = 1; i < pairList.size(); i++){
+			currPair = pairList.get(i);
+			index = 0;
+			for (int j = 0; j < groupList.size(); j++){
+				group = new SubsetPairGroup(groupList.get(j));
+				if (group.tryToAdd(currPair)){
+					groupList.add(j + 1, group);
+					j++;
+				}
+			}
+		}
+	//	System.out.println(groupList.size());
+		
+		for (int i = 0; i < groupList.size(); i++){
+			if (!groupList.get(i).isFinished()){
+				groupList.remove(i);
+				i--;
+			}
+		}
+		
+		return groupList;
+	}
+	
+	
+	/*
+	 * Old Version *
+	 * Calculate all successful group of pairs, 
+	 * which covers the whole set, and each pair is a valid pair
+	 * => Final result
+	 */
+	private static List<SubsetPairGroup> calculateCoveringSubsetPairGroups_old(List<SubsetPair> pairList){
 		List<SubsetPairGroup> groupList = new ArrayList<SubsetPairGroup>();
 		SubsetPairGroup group;
 		

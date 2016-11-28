@@ -78,7 +78,7 @@ public class DoubleArithmetic {
         return b1.min(b2).doubleValue();    
     }    
   
-        public static int compareTo(double v1,double v2){    
+    public static int compareTo(double v1,double v2){    
         BigDecimal b1 = new BigDecimal(v1);    
         BigDecimal b2 = new BigDecimal(v2);    
         return b1.compareTo(b2);    

@@ -11,7 +11,7 @@ public class Subset {
 	public Subset(byte[] indicator, double sum, int type){
 		this.indicator = indicator;
 		this.sum = sum; 
-		totalSize = indicator.length;
+		if (indicator != null) totalSize = indicator.length;
 		this.type = type;
 	}
 	

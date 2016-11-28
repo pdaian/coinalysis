@@ -43,7 +43,7 @@ public class SubsetPairGroup {
 	/*
 	 * Test if the pair can be added into this group, if yes, add it; if not
 	 */
-	public void tryToAdd(SubsetPair pair){
+	public boolean tryToAdd(SubsetPair pair){
 //		for (int i = 0; i < inputSize; i++) if (inputInd[i] == 1 && pair.inputSubset.indicator[i] == 1) return false;
 //		for (int i = 0; i < outputSize; i++) if (outputInd[i] == 1 && pair.outputSubset.indicator[i] == 1) return false;
 //		pairs.add(pair);
@@ -55,17 +55,19 @@ public class SubsetPairGroup {
 		pairs.add(pair);
 		for (int i = 0; i < inputSize; i++){
 			if (pair.inputSubset.indicator[i] == 1){
-				if (inputInd[i] == 1) valid = false;
+				if (inputInd[i] == 1) valid = false; // dulplicate elems in input set
 				inputInd[i] = 1;
 			}
 		}
 		for (int i = 0; i < outputSize; i++){
 			if (pair.outputSubset.indicator[i] == 1){
-				if (outputInd[i] == 1) valid = false;
+				if (outputInd[i] == 1) valid = false; // dulplicate elems in output set
 				outputInd[i] = 1;
 			}
 		}
 		groupCost = DoubleArithmetic.add(groupCost, pair.subCost);
+		
+		return valid;
 	}
 	
 	public boolean isFinished(){
@@ -88,6 +90,30 @@ public class SubsetPairGroup {
 			System.out.print("\tOutputSubset:");
 			for (int j = 0; j < outputSize; j++){
 				System.out.print(pair.outputSubset.indicator[j] + " ");
+			}
+			System.out.println();
+		}
+	}
+	
+	public void printAsTransaction(Transaction tx){
+		SubsetPair pair;
+		for (int i = 0; i < pairs.size(); i++){
+			System.out.println("\tSubtransaction " + (i + 1) + ": ");
+			pair = pairs.get(i);
+			System.out.println("\t\tInputSubset:");
+			for (int j = 0; j < inputSize; j++){
+				if (pair.inputSubset.indicator[j] == 1){
+					System.out.println("\t\t\t" + tx.input.get(j).name + "\t" + tx.input.get(j).value);
+				//	System.out.println("\t\t\t\t" + tx.input.get(j).value);
+				}
+			}
+			System.out.println();
+			System.out.println("\t\tOutputSubset:");
+			for (int j = 0; j < outputSize; j++){
+				if (pair.outputSubset.indicator[j] == 1){
+					System.out.println("\t\t\t" + tx.output.get(j).name + "\t" + tx.output.get(j).value);
+			//	System.out.println("\t\t\t\t" + tx.output.get(j).value);
+				}
 			}
 			System.out.println();
 		}

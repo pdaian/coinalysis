@@ -1,9 +1,14 @@
 #input
+
 1FDCgJ8m2xDyVmYuankk13XReVC2Zvs5cz 0.0067
 1FAkhqm95YnV5Mi7Q5j2Wb8CkbK7Z9zpyB 0.0056
 
 #output
+
 1MUzngtNnrQRXRqqRTeDmpULW8X1aaGWeR 0.001
+
 1231PgW8KbpwKkvACPhp13fcL6fM5sKGvy 0.0052
+
 1Fufjpf9RM2aQsGedhSpbSCGRHrmLMJ7yY 0.001
+
 1iYSYHTpr2wMShaXTTNUzMohkpuV5p5ep 0.0045
