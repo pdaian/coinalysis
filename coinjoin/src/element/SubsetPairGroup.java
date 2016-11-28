@@ -112,7 +112,7 @@ public class SubsetPairGroup {
 			for (int j = 0; j < outputSize; j++){
 				if (pair.outputSubset.indicator[j] == 1){
 					System.out.println("\t\t\t" + tx.output.get(j).name + "\t" + tx.output.get(j).value);
-			//	System.out.println("\t\t\t\t" + tx.output.get(j).value);
+				//	System.out.println("\t\t\t\t" + tx.output.get(j).value);
 				}
 			}
 			System.out.println();

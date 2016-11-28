@@ -16,10 +16,8 @@ public class TransactionAnalysis {
 	public final static int INPUT = 1, OUTPUT = 2;
 	
 	public static void main(String[] args){
-		Scanner sc = new Scanner(System.in);
-		
 		/* Test functions */
-		Transaction tx = initializeGraphNodes(sc.nextLine());
+		Transaction tx = initializeGraphNodes(args[0]);
 		joinAndCounteract(tx);
 		ignoreSmallInput(tx);
 		//if (!isValidTransaction) 
@@ -46,7 +44,7 @@ public class TransactionAnalysis {
 			groupList.get(i).printAsTransaction(tx);
 		}
 		
-		System.out.println("#Different Paritions: " + (groupList.size() + 1));
+		System.out.println("#Different Paritions: " + (groupList.size()));
 	}
 	
 	/*
