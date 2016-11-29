@@ -25,15 +25,15 @@ public class TransactionAnalysis {
 		List<Subset> outputSubsets = calculateSubsets(tx.output, OUTPUT);
 		if (inputSubsets.size() == 0 || outputSubsets.size() == 0){ // at least one of list has only one node, cannot be further partitioned
 			System.out.println("At least one side has only one party");
-		//	System.out.println("#Different partitions: 0");
-			System.out.println("#Different partitions: 1");
+			System.out.println("#Different partitions: 0");
+			//System.out.println("#Different partitions: 1");
 			return;
 		}
 		List<SubsetPair> pairList = calculateValidSubsetPairs(inputSubsets, outputSubsets, tx.cost);
 		if (pairList.size() == 0){ // No valid pairs formed
 			System.out.println("No valid pairs formed");
-		//	System.out.println("#Different partitions: 0");
-			System.out.println("#Different partitions: 1");
+			System.out.println("#Different partitions: 0");
+			//System.out.println("#Different partitions: 1");
 			return;
 		}
 		List<SubsetPairGroup> groupList = calculateCoveringSubsetPairGroups(pairList);
