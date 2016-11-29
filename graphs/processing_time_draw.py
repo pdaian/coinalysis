@@ -11,7 +11,13 @@ def draw(filename):
     print sum(y)
 
     plt.hist2d(x, y, bins=30, range=[[0.0, 440000.0], [0.0, 90.0]])
+    plt.xlabel('Block Number')
+    plt.ylabel('Processing Time (s)')
+    plt.title('Full Blockchain Processing Time')
     plt.show()
     plt.hist2d(x, y, bins=30, range=[[300000.0, 440000.0], [0.0, 90.0]])
+    plt.xlabel('Block Number')
+    plt.ylabel('Processing Time (s)')
+    plt.title('Recent Blocks Processing Time')
     plt.show()
 
