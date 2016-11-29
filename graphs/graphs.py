@@ -1,4 +1,5 @@
-import blocks, transactions, config, os, json, threading, cache, time
+from blockchaincrawl import blocks, transactions, config, cache
+import os, json, threading, time
 
 def gather_data(block_start, block_end, file_name, draw_module):
     data = ""
@@ -7,9 +8,11 @@ def gather_data(block_start, block_end, file_name, draw_module):
     start_time = time.time()
     tx_cache = cache.TxCache(100000)
     for block_number in range(block_start, block_end):
+        if block_number % 1000 is 0:
+            print "Processing", block_number
         block_index = block_number - block_start
         block_hash = block_hashes[block_index]
-        d='.'
+        d='final_analysis'
         for subdirectory in [os.path.join(d,o) for o in os.listdir(d) if os.path.isdir(os.path.join(d,o))]:
             d = os.path.join(subdirectory, block_hash)
             if os.path.isdir(d):

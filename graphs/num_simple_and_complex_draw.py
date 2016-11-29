@@ -18,9 +18,15 @@ def draw1(filename):
     y = [int(line.split(",")[1]) for line in data]
     z = [int(line.split(",")[2]) for line in data]
 
-    plt.hist2d(x, y, bins=30, range=[[0.0, 500000], [0.0, 4000.0]])
+    plt.hist2d(y, z, bins=30, range=[[20.0, 4000.0], [20.0, 200.0]])
     plt.show()
-    plt.hist2d(x, z, bins=30, range=[[0.0, 500000], [1.0, 150.0]])
+    plt.hist2d(x, y, bins=30, range=[[0.0, 440000], [0.0, 4000.0]])
+    plt.show()
+    plt.hist2d(x, y, bins=30, range=[[0.0, 440000], [5.0, 20000.0]])
+    plt.show()
+    plt.hist2d(x, z, bins=30, range=[[0.0, 440000], [0.0, 200.0]])
+    plt.show()
+    plt.hist2d(x, z, bins=30, range=[[0.0, 440000], [5.0, 1000.0]])
     plt.show()
 
 draw = draw1
